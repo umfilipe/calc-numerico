@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método da Bisseção</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Método da Bisseção</h1>
+            <p class="subtitle">Encontre raízes de funções</p>
+
+            <form id="biseccaoForm">
+                <div class="form-group">
+                    <label for="funcao">Função f(variável):</label>
+                    <input
+                        type="text"
+                        id="funcao"
+                        placeholder="Ex: t**2 - 4, sin(y), sqrt(u), n^3 - 1"
+                        required
+                    >
+                    <small>Use qualquer letra para a variável. Use ^ para potência, sin, cos, tan, sqrt, exp, log, log10, e, pi</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="a">Valor a:</label>
+                        <input type="number" id="a" placeholder="Ex: 0" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="b">Valor b:</label>
+                        <input type="number" id="b" placeholder="Ex: 5" step="any" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tolerancia">Tolerância:</label>
+                        <input type="number" id="tolerancia" placeholder="Ex: 0.0001" step="any" value="0.0001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxIteracoes">Máx. Iterações:</label>
+                        <input type="number" id="maxIteracoes" placeholder="Ex: 100" value="100" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">Descobrir Raíz</button>
+            </form>
+
+            <div id="resultado" class="resultado hidden">
+                <h2>Resultado</h2>
+                <div class="resultado-content">
+                    <p><strong>Raiz aproximada:</strong> <span id="raizValue">-</span></p>
+                    <p><strong>Número de iterações:</strong> <span id="iteracoesValue">-</span></p>
+                    <p><strong>Valor da função:</strong> <span id="fValue">-</span></p>
+                </div>
+            </div>
+
+            <div id="erro" class="erro hidden">
+                <span id="erroMessage"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
