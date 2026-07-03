@@ -3,63 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Método da Bisseção</title>
+    <title>Método da Bisseção e Interpolação de Lagrange</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <div class="card">
-            <h1>Método da Bisseção</h1>
-            <p class="subtitle">Encontre raízes de funções</p>
+            <h1 id="titulo">Encontrar raízes (Bisseção)</h1>
+            <p class="subtitle" id="subtitulo">Método da Bisseção para encontrar raízes de funções</p>
 
-            <form id="biseccaoForm">
-                <div class="form-group">
-                    <label for="funcao">Função f(variável):</label>
-                    <input
-                        type="text"
-                        id="funcao"
-                        placeholder="Ex: t**2 - 4, sin(y), sqrt(u), n^3 - 1"
-                        required
-                    >
-                    <small>Use qualquer letra para a variável. Use ^ para potência, sin, cos, tan, sqrt, exp, log, log10, e, pi</small>
+            <!-- Abas -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="bisseccao">Bisseção</button>
+                <button class="tab-btn" data-tab="lagrange">Interpolação de Lagrange</button>
+            </div>
+
+            <!-- Aba: Bisseção -->
+            <div id="bisseccao" class="tab-content active">
+                <form id="biseccaoForm">
+                    <div class="form-group">
+                        <label for="funcao">Função f(variável):</label>
+                        <input
+                            type="text"
+                            id="funcao"
+                            placeholder="Ex: t**2 - 4, sin(y), sqrt(u), n^3 - 1"
+                            required
+                        >
+                        <small>Use qualquer letra para a variável. Use ^ para potência, sin, cos, tan, sqrt, exp, log, log10, e, pi</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="a">Valor a:</label>
+                            <input type="number" id="a" placeholder="Ex: 0" step="any" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="b">Valor b:</label>
+                            <input type="number" id="b" placeholder="Ex: 5" step="any" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tolerancia">Tolerância:</label>
+                            <input type="number" id="tolerancia" placeholder="Ex: 0.0001" step="any" value="0.0001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="maxIteracoes">Máx. Iterações:</label>
+                            <input type="number" id="maxIteracoes" placeholder="Ex: 100" value="100" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Descobrir Raíz</button>
+                </form>
+
+                <div id="resultado" class="resultado hidden">
+                    <h2>Resultado</h2>
+                    <div class="resultado-content">
+                        <p><strong>Raiz aproximada:</strong> <span id="raizValue">-</span></p>
+                        <p><strong>Número de iterações:</strong> <span id="iteracoesValue">-</span></p>
+                        <p><strong>Valor da função:</strong> <span id="fValue">-</span></p>
+                    </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="a">Valor a:</label>
-                        <input type="number" id="a" placeholder="Ex: 0" step="any" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="b">Valor b:</label>
-                        <input type="number" id="b" placeholder="Ex: 5" step="any" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="tolerancia">Tolerância:</label>
-                        <input type="number" id="tolerancia" placeholder="Ex: 0.0001" step="any" value="0.0001" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="maxIteracoes">Máx. Iterações:</label>
-                        <input type="number" id="maxIteracoes" placeholder="Ex: 100" value="100" required>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary">Descobrir Raíz</button>
-            </form>
-
-            <div id="resultado" class="resultado hidden">
-                <h2>Resultado</h2>
-                <div class="resultado-content">
-                    <p><strong>Raiz aproximada:</strong> <span id="raizValue">-</span></p>
-                    <p><strong>Número de iterações:</strong> <span id="iteracoesValue">-</span></p>
-                    <p><strong>Valor da função:</strong> <span id="fValue">-</span></p>
+                <div id="erro" class="erro hidden">
+                    <span id="erroMessage"></span>
                 </div>
             </div>
 
-            <div id="erro" class="erro hidden">
-                <span id="erroMessage"></span>
+            <!-- Aba: Interpolação de Lagrange -->
+            <div id="lagrange" class="tab-content">
+                <div class="form-group">
+                    <label>Pontos para Interpolação:</label>
+                    <div id="pontosContainer" class="pontos-container">
+                        <div class="ponto-input">
+                            <input type="number" class="ponto-x" placeholder="x" step="any" required>
+                            <input type="number" class="ponto-y" placeholder="y" step="any" required>
+                            <button type="button" class="btn-remove" onclick="removerPonto(this)">✕</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="adicionarPonto()">+ Adicionar Ponto</button>
+                </div>
+
+                <button type="button" class="btn-primary" onclick="executarLagrange()">Gerar Polinômio</button>
+
+                <div id="resultadoLagrange" class="resultado hidden">
+                    <h2>Polinômio Interpolador</h2>
+                    <div class="resultado-content">
+                        <p><strong>P(x) =</strong> <span id="polinomioValue">-</span></p>
+                    </div>
+                </div>
+
+                <div id="erroLagrange" class="erro hidden">
+                    <span id="erroLagrangeMessage"></span>
+                </div>
             </div>
         </div>
     </div>
